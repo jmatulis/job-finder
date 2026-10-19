@@ -31,7 +31,7 @@ npm run dev                         # http://localhost:3000
 
 Every source is optional. A source without a key is skipped and shown as such. The company watchlist needs no key.
 
-`CLAUDE_MODEL` defaults to `claude-opus-5-5`. You can set it to `claude-sonnet-5-5` for lower cost.
+`CLAUDE_MODEL` defaults to `claude-sonnet-5-5` (about $0.04–0.08 per tailored resume). Set it to `claude-opus-5-5` for the stronger model at about twice the cost.
 
 ## How to use it
 

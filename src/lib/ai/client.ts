@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { z } from "zod";
 
-export const MODEL = process.env.CLAUDE_MODEL || "claude-opus-5-5";
+export const MODEL = process.env.CLAUDE_MODEL || "claude-sonnet-5-5";
 
 let client: Anthropic | null = null;
 function getClient() {
