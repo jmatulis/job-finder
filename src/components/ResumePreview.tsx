@@ -38,6 +38,25 @@ export function ResumePreview({ resume: r }: { resume: Resume }) {
         </div>
       ))}
 
+      {r.projects.length > 0 && <Heading>Projects</Heading>}
+      {r.projects.map((p, i) => (
+        <div key={i} className="mb-3">
+          <div className="flex flex-wrap justify-between gap-x-4">
+            <span>
+              <span className="font-bold">{p.name}</span>
+              {p.role ? `, ${p.role}` : ""}
+            </span>
+            <span className="text-neutral-600">{p.date}</span>
+          </div>
+          {p.link && <div className="text-neutral-600">{p.link}</div>}
+          <ul className="mt-1 list-disc space-y-0.5 pl-5">
+            {p.bullets.map((b, j) => (
+              <li key={j}>{b}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
       {r.skills.length > 0 && (
         <>
           <Heading>Skills</Heading>
@@ -64,6 +83,15 @@ export function ResumePreview({ resume: r }: { resume: Resume }) {
           ))}
         </>
       )}
+
+      {r.otherSections.map((sec, i) => (
+        <div key={i}>
+          <Heading>{sec.title}</Heading>
+          {sec.items.map((item, j) => (
+            <p key={j}>{item}</p>
+          ))}
+        </div>
+      ))}
     </article>
   );
 }

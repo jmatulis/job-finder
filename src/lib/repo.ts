@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { CONFIDENCE_RANK } from "./careerLink";
 import { scoreJob } from "./matching";
-import type { Profile, Resume } from "./resume";
+import { withResumeDefaults, type Profile, type Resume } from "./resume";
 import type { MergedJob } from "./sources";
 import type { WatchlistEntry } from "./sources/ats";
 import type { DocStore } from "./store";
@@ -18,7 +18,7 @@ export async function getProfile(s: DocStore): Promise<Profile | null> {
   if (!doc) return null;
   return {
     rawText: doc.rawText,
-    resume: doc.resume,
+    resume: withResumeDefaults(doc.resume),
     keywords: doc.keywords,
     targetTitles: doc.targetTitles,
     locations: doc.locations,
@@ -178,9 +178,13 @@ export async function saveTailored(
 
 export async function latestTailored(s: DocStore, jobId: string) {
   const all = await s.list<TailoredDto>("tailored", ["jobId", jobId]);
-  return all.sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0] ?? null;
+  const latest = all.sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
+  return latest ? { ...latest, resume: withResumeDefaults(latest.resume) } : null;
 }
 
-export const getTailored = (s: DocStore, id: string) => s.get<TailoredDto>("tailored", id);
+export async function getTailored(s: DocStore, id: string) {
+  const t = await s.get<TailoredDto>("tailored", id);
+  return t ? { ...t, resume: withResumeDefaults(t.resume) } : null;
+}
 
 export const updateTailored = (s: DocStore, id: string, resume: Resume) => s.update("tailored", id, { resume });

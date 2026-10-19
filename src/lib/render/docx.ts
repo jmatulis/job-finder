@@ -46,6 +46,18 @@ export async function renderResumeDocx(r: Resume): Promise<Buffer> {
     }
   }
 
+  if (r.projects.length) {
+    children.push(heading("Projects"));
+    for (const p of r.projects) {
+      children.push(splitRow([run(p.name, { bold: true }), run(p.role ? `, ${p.role}` : "")], p.date));
+      if (p.link) children.push(new Paragraph({ children: [run(p.link, { color: "555555" })] }));
+      for (const b of p.bullets) {
+        children.push(new Paragraph({ bullet: { level: 0 }, spacing: { before: 20 }, children: [run(b)] }));
+      }
+      children.push(new Paragraph({ spacing: { after: 80 }, children: [] }));
+    }
+  }
+
   if (r.skills.length) {
     children.push(heading("Skills"), new Paragraph({ children: [run(r.skills.join(", "))] }));
   }
@@ -59,6 +71,10 @@ export async function renderResumeDocx(r: Resume): Promise<Buffer> {
 
   if (r.certifications.length) {
     children.push(heading("Certifications"), ...r.certifications.map((c) => new Paragraph({ children: [run(c)] })));
+  }
+
+  for (const sec of r.otherSections) {
+    children.push(heading(sec.title), ...sec.items.map((item) => new Paragraph({ children: [run(item)] })));
   }
 
   const doc = new Document({

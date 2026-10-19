@@ -28,8 +28,24 @@ export const ResumeSchema = z.object({
       end: z.string(),
     }),
   ),
+  projects: z.array(
+    z.object({
+      name: z.string(),
+      role: z.string(),
+      date: z.string(),
+      link: z.string(),
+      bullets: z.array(z.string()),
+    }),
+  ),
   skills: z.array(z.string()),
   certifications: z.array(z.string()),
+  // Anything else on the resume (volunteering, awards, publications…), so nothing is dropped.
+  otherSections: z.array(
+    z.object({
+      title: z.string(),
+      items: z.array(z.string()),
+    }),
+  ),
 });
 
 export type Resume = z.infer<typeof ResumeSchema>;
@@ -39,9 +55,17 @@ export const emptyResume = (): Resume => ({
   summary: "",
   experience: [],
   education: [],
+  projects: [],
   skills: [],
   certifications: [],
+  otherSections: [],
 });
+
+/** Fills sections added after a resume was saved (e.g. projects) with empty defaults. */
+export function withResumeDefaults(r: Partial<Resume> | null | undefined): Resume {
+  const base = emptyResume();
+  return { ...base, ...r, contact: { ...base.contact, ...r?.contact } };
+}
 
 export type RemotePref = "any" | "remote" | "onsite";
 

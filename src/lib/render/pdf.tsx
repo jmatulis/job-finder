@@ -61,6 +61,26 @@ function ResumeDoc({ r }: { r: Resume }) {
           </View>
         ))}
 
+        {r.projects.length ? <Text style={s.heading}>Projects</Text> : null}
+        {r.projects.map((p, i) => (
+          <View key={i} style={s.job} wrap={false}>
+            <View style={s.row}>
+              <Text>
+                <Text style={s.bold}>{p.name}</Text>
+                {p.role ? `, ${p.role}` : ""}
+              </Text>
+              <Text style={s.muted}>{p.date}</Text>
+            </View>
+            {p.link ? <Text style={s.muted}>{p.link}</Text> : null}
+            {p.bullets.map((b, j) => (
+              <View key={j} style={s.bullet}>
+                <Text style={s.dot}>•</Text>
+                <Text style={s.bulletText}>{b}</Text>
+              </View>
+            ))}
+          </View>
+        ))}
+
         {r.skills.length ? (
           <View>
             <Text style={s.heading}>Skills</Text>
@@ -87,6 +107,15 @@ function ResumeDoc({ r }: { r: Resume }) {
             ))}
           </View>
         ) : null}
+
+        {r.otherSections.map((sec, i) => (
+          <View key={i}>
+            <Text style={s.heading}>{sec.title}</Text>
+            {sec.items.map((item, j) => (
+              <Text key={j}>{item}</Text>
+            ))}
+          </View>
+        ))}
       </Page>
     </Document>
   );
