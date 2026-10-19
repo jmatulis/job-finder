@@ -1,0 +1,61 @@
+{
+  "status": "OK",
+  "data": [
+    {
+      "job_id": "ats",
+      "employer_name": "Acme Corp",
+      "employer_website": "https://www.acme.com",
+      "job_publisher": "Indeed",
+      "job_title": "Data Analyst",
+      "job_apply_link": "https://www.indeed.com/viewjob?jk=111",
+      "job_apply_is_direct": false,
+      "apply_options": [
+        { "publisher": "Indeed", "apply_link": "https://www.indeed.com/viewjob?jk=111", "is_direct": false },
+        { "publisher": "Jobsora", "apply_link": "https://us.jobsora.com/job/111", "is_direct": false },
+        { "publisher": "Acme Careers", "apply_link": "https://acme.wd1.myworkdayjobs.com/External/job/Chicago/Data-Analyst_R123", "is_direct": true }
+      ],
+      "job_description": "We need 3+ years of SQL and Tableau experience. Python is a plus.",
+      "job_is_remote": false,
+      "job_posted_at_datetime_utc": "2026-10-15T00:00:00.000Z",
+      "job_city": "Chicago",
+      "job_state": "IL",
+      "job_country": "US",
+      "job_location": "Chicago, IL",
+      "job_min_salary": 70000,
+      "job_max_salary": 90000,
+      "job_salary_period": "YEAR"
+    },
+    {
+      "job_id": "employer",
+      "employer_name": "Globex",
+      "employer_website": "http://globex.com",
+      "job_publisher": "JobLeads",
+      "job_title": "Senior Data Analyst",
+      "job_apply_link": "https://www.jobleads.com/us/job/222",
+      "job_apply_is_direct": false,
+      "apply_options": [
+        { "publisher": "JobLeads", "apply_link": "https://www.jobleads.com/us/job/222", "is_direct": false },
+        { "publisher": "Globex", "apply_link": "https://careers.globex.com/jobs/4567", "is_direct": false }
+      ],
+      "job_description": "Analyst role.",
+      "job_is_remote": true,
+      "job_city": null,
+      "job_location": "Remote"
+    },
+    {
+      "job_id": "board",
+      "employer_name": "Initech LLC",
+      "employer_website": "https://initech.com",
+      "job_publisher": "Indeed",
+      "job_title": "Data Analyst",
+      "job_apply_link": "https://www.indeed.com/viewjob?jk=abc",
+      "job_apply_is_direct": true,
+      "apply_options": [{ "publisher": "Indeed", "apply_link": "https://www.indeed.com/viewjob?jk=abc", "is_direct": true }],
+      "job_description": "Analyst.",
+      "job_is_remote": false,
+      "job_city": "Austin",
+      "job_state": "TX",
+      "job_location": "Austin, TX"
+    }
+  ]
+}

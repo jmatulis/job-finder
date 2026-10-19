@@ -1,0 +1,10 @@
+{
+  "apphosting": {
+    "backendId": "job-finder",
+    "rootDir": ".",
+    "ignore": ["node_modules", ".git", ".next", "data", ".env*", "firebase-debug.log", ".playwright-mcp"]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

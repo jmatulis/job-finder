@@ -1,0 +1,34 @@
+# Firebase App Hosting configuration.
+# Secrets are stored in Cloud Secret Manager. Set them with:
+#   npx firebase-tools apphosting:secrets:set <NAME> --force
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+  memoryMiB: 1024
+  timeoutSeconds: 300
+
+env:
+  - variable: DATA_BACKEND
+    value: firestore
+  - variable: AUTH_REQUIRED
+    value: "true"
+    availability: [BUILD, RUNTIME]
+  # Google accounts allowed to sign in (comma-separated).
+  - variable: ALLOWED_EMAILS
+    secret: ALLOWED_EMAILS
+
+  # Public Firebase web config (safe to commit).
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyCkI5OQcGoNprDrKot8jiMqixqZHxs_rOI
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: jonas-job-finder.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: jonas-job-finder
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:319558244801:web:a0bb0b3ce2698ae6403740"
+    availability: [BUILD, RUNTIME]
+
+  # API keys: added here by `apphosting:secrets:set --force` once you set them.
