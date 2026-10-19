@@ -62,9 +62,9 @@ export async function runSearch(q: SearchQuery, watchlist: WatchlistEntry[]) {
   const report: SourceReport[] = [];
   const collected: NormalizedJob[] = [];
 
-  const runs: [string, () => Promise<NormalizedJob[]>][] = [
+  const runs: [string, () => Promise<{ jobs: NormalizedJob[]; note?: string }>][] = [
     ["JSearch (Indeed, LinkedIn, Glassdoor, Jobsora, JobLeads…)", () => searchJSearch(q)],
-    ["Adzuna", () => searchAdzuna(q)],
+    ["Adzuna", async () => ({ jobs: await searchAdzuna(q) })],
   ];
   const settled = await Promise.allSettled([
     ...runs.map(([, fn]) => fn()),
@@ -75,9 +75,9 @@ export async function runSearch(q: SearchQuery, watchlist: WatchlistEntry[]) {
     if (i < runs.length) {
       const name = runs[i][0];
       if (r.status === "fulfilled") {
-        const jobs = r.value as NormalizedJob[];
+        const { jobs, note } = r.value as { jobs: NormalizedJob[]; note?: string };
         collected.push(...jobs);
-        report.push({ source: name, count: jobs.length });
+        report.push({ source: name, count: jobs.length, note });
       } else {
         const err = r.reason as Error;
         report.push({ source: name, count: 0, error: err.message, skipped: err instanceof MissingKeyError });

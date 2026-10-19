@@ -61,23 +61,40 @@ export function mapJSearchJob(j: JSearchJob): NormalizedJob {
   };
 }
 
-export async function searchJSearch(q: SearchQuery): Promise<NormalizedJob[]> {
+/**
+ * JSearch v5 `/search-v2`: about 10 jobs per request, paged with a cursor. Each
+ * page is one billed request, so `q.pages` is also the request count.
+ */
+export async function searchJSearch(q: SearchQuery): Promise<{ jobs: NormalizedJob[]; note?: string }> {
   const key = process.env.RAPIDAPI_KEY;
   if (!key) throw new MissingKeyError("RAPIDAPI_KEY is not set");
   const params = new URLSearchParams({
     query: q.location ? `${q.keywords} in ${q.location}` : q.keywords,
-    page: "1",
-    num_pages: String(Math.min(Math.max(q.pages, 1), 5)),
     date_posted: q.datePosted,
     country: q.country || "us",
   });
   if (q.remote) params.set("work_from_home", "true");
   if (q.location && q.radiusMiles > 0) params.set("radius", String(milesToKm(q.radiusMiles)));
-  const res = await fetch(`https://${HOST}/search?${params}`, {
-    headers: { "X-RapidAPI-Key": key, "X-RapidAPI-Host": HOST },
-    signal: AbortSignal.timeout(45_000),
-  });
-  if (!res.ok) throw new Error(`JSearch HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
-  const body = (await res.json()) as { data?: JSearchJob[] };
-  return (body.data ?? []).map(mapJSearchJob);
+
+  const jobs: NormalizedJob[] = [];
+  let remaining: string | null = null;
+  const pages = Math.min(Math.max(q.pages, 1), 5);
+  for (let page = 0; page < pages; page++) {
+    const res = await fetch(`https://${HOST}/search-v2?${params}`, {
+      headers: { "X-RapidAPI-Key": key, "X-RapidAPI-Host": HOST },
+      signal: AbortSignal.timeout(45_000),
+    });
+    if (res.status === 429) {
+      if (jobs.length) break;
+      throw new Error("JSearch monthly request limit reached. It resets at the start of your RapidAPI billing period.");
+    }
+    if (!res.ok) throw new Error(`JSearch HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+    remaining = res.headers.get("x-ratelimit-requests-remaining") ?? remaining;
+    const body = (await res.json()) as { data?: { jobs?: JSearchJob[]; cursor?: string | null } | JSearchJob[] };
+    const data = Array.isArray(body.data) ? { jobs: body.data, cursor: null } : (body.data ?? {});
+    jobs.push(...(data.jobs ?? []).map(mapJSearchJob));
+    if (!data.cursor) break;
+    params.set("cursor", data.cursor);
+  }
+  return { jobs, note: remaining !== null ? `${remaining} requests left this month` : undefined };
 }

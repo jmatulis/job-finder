@@ -32,4 +32,6 @@ env:
     availability: [ BUILD, RUNTIME ]
   - variable: RAPIDAPI_KEY
     secret: RAPIDAPI_KEY
+  - variable: ANTHROPIC_API_KEY
+    secret: ANTHROPIC_API_KEY
   # API keys: added here by `apphosting:secrets:set --force` once you set them.

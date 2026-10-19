@@ -43,6 +43,7 @@ export interface SourceReport {
   count: number;
   error?: string;
   skipped?: boolean;
+  note?: string;
 }
 
 export class MissingKeyError extends Error {}

@@ -124,10 +124,10 @@ function SearchInner() {
         <label className="sm:col-span-3">
           <span className="label">Depth</span>
           <select className="input" value={q.pages} onChange={(e) => set("pages", Number(e.target.value))}>
-            <option value={1}>Quick (~10–60 results)</option>
-            <option value={2}>Normal (~20–120)</option>
-            <option value={3}>Deep (~30–180)</option>
-            <option value={5}>Widest (~50–300, uses more quota)</option>
+            <option value={1}>Quick: ~10 board jobs (1 JSearch request)</option>
+            <option value={2}>Normal: ~20 (2 requests)</option>
+            <option value={3}>Deep: ~30 (3 requests)</option>
+            <option value={5}>Widest: ~50 (5 requests)</option>
           </select>
         </label>
         <label className="flex items-end gap-2 pb-2 sm:col-span-3">
@@ -151,7 +151,7 @@ function SearchInner() {
               title={r.error}
               className={`rounded-md border px-2 py-1 ${r.error ? (r.skipped ? "border-line text-muted" : "border-danger/40 text-danger") : "border-line"}`}
             >
-              {r.source}: {r.skipped ? "skipped, API key not set" : r.error && r.count === 0 ? `failed (${r.error.slice(0, 80)})` : `${r.count} results`}
+              {r.source}: {r.skipped ? "skipped, API key not set" : r.error && r.count === 0 ? `failed (${r.error.slice(0, 80)})` : `${r.count} results${r.note ? ` · ${r.note}` : ""}`}
             </span>
           ))}
         </div>
